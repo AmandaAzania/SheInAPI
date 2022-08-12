@@ -256,7 +256,7 @@ router.delete('/products/:productId', (req, res)=> {
 });
 
 // cart
-router.get('users/:id/cart', (req, res)=>{
+router.get('/users/:id/cart', (req, res)=>{
     const cart = `select cart from users where user_id = ${req.params.id}`
     db.query(cart,(err, results)=>{
         if(err) throw err 
@@ -265,6 +265,49 @@ router.get('users/:id/cart', (req, res)=>{
             results:JSON.parse(results[0].cart)
         })
 
+    })
+})
+
+router.post('/users/:id/cart', bodyParser.json(),(req, res)=>{
+    let route = req.params
+    const cart = `select cart from users where user_id = ${route.id}`
+    db.query(cart,(err, results)=>{
+        if(err)throw err
+        if(results.length > 0 ){
+            let cart
+            if(results[0].cart == null){
+                cart = []
+                
+            }else{
+                cart = JSON.parse(results[0].cart)
+            }
+        let product = {
+            'cart_id' : cart.length + 1, 
+            'title' : req.body.title,
+            'catergory':  req.body.catergory,
+            'description': req.body.description,
+            'imgURL': req.body.imgURL,
+            'quantity': parseInt(req.body.quantity) -1,
+            'price': req.body.price,
+            'created_by':req.body.created_by
+
+
+        }
+        cart.push(product)
+        const addCart = `update users set cart = ? where user_id = ${req.params.id}`
+        db.query (addCart, JSON.stringify(cart), (err, results)=>{
+            if(err)throw err 
+            res.json ({
+                status: 200,
+                message: 'successfully added item'
+            })
+        })
+        } else{
+            res.json({
+                status: 404,
+                message: 'there is no user with that id'
+            })
+        }
     })
 })
 
