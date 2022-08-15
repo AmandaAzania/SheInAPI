@@ -45,16 +45,7 @@ router.post('/register', bodyParser.json(),(req, res)=>{
             res.send("The email provided is already registered. Enter another email to successfully register");
         } else {
             const bd = req.body;
-             // hash(bd.userpassword, 10).then((hash) => {
-                //set the password to hash value
-        //         (err, result) => {
-        //   if (err){
-        //    return res.status(400).send({msg: err})
-        //   }
-        //   return res.status(201).send({msg: "hash successful"})
-        //  }
-        //         bd.userpassword = hash
-        //       })
+   
             let generateSalt = await bcrypt.genSalt();
             bd.password = await bcrypt.hash(bd.password, generateSalt);
             console.log(bd);
@@ -228,19 +219,7 @@ router.put('/products/:productId', bodyParser.json(), (req, res)=> {
         res.send(`number of affected record/s: ${data.affectedRows}`);
     })
 });
-// router.put('/products/:productId', bodyParser.json(), (req, res)=> {
-//     const bd = req.body;
-//     const strQry =
-//     `
-//     UPDATE products
-//     SET ?
-//     WHERE productId = ?
-//     `;
-//     db.query(strQry, [bd, req.params.productId], (err)=> {
-//         if(err) throw err;
-//         res.status(200).json({msg: "A product was modified."});
-//     })
-// });
+
 // DELETE PRODUCT
 router.delete('/products/:productId', (req, res)=> {
     // Query
