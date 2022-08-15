@@ -113,7 +113,7 @@ router.get('/users', (req, res)=> {
     // Query
     const strQry =
     `
-    SELECT user_Id, user_fullname, email, password, userRole, phone_number, join_date
+    SELECT user_id, user_fullname, email, password, userRole, phone_number, join_date
     FROM users;
     `;
     db.query(strQry, (err, results)=> {
@@ -126,13 +126,13 @@ router.get('/users', (req, res)=> {
     })
 });
 // GET ONE USER
-router.get('/users/:userId', (req, res)=> {
+router.get('/users/:user_id', (req, res)=> {
     const strQry =
-    `SELECT user_Id, user_fullname, email, password, userRole, phone_number, join_date, cart
+    `SELECT user_id, user_fullname, email, password, userRole, phone_number, join_date, cart
     FROM users
-    WHERE userId = ?;
+    WHERE user_id = ?;
     `;
-    db.query(strQry, [req.params.userId], (err, results) => {
+    db.query(strQry, [req.params.user_id], (err, results) => {
         if(err) throw err;
         res.setHeader('Access-Control-Allow-Origin','*')
         res.json({
@@ -153,13 +153,13 @@ router.get("/users/verify", (req, res) => {
     });
   });
 // Delete a user
-router.delete('/users/:userId', (req, res)=> {
+router.delete('/users/:user_id', (req, res)=> {
     const strQry =
     `
     DELETE FROM users
-    WHERE userId = ?;
+    WHERE user_id = ?;
     `;
-    db.query(strQry,[req.params.userId], (err)=> {
+    db.query(strQry,[req.params.user_id], (err)=> {
         if(err) throw err;
         res.status(200).json({msg: "A user was deleted."});
     })
