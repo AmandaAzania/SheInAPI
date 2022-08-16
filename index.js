@@ -33,7 +33,7 @@ router.get('/', (req, res)=> {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
 })
 // REGISTER
-router.post('/register', bodyParser.json(),(req, res)=>{
+router.post('/users', bodyParser.json(),(req, res)=>{
     let emails = `SELECT email FROM users WHERE ?`;
     let email = {
         email: req.body.email
@@ -167,7 +167,7 @@ router.post('/products', bodyParser.json(), (req, res)=> {
     `;
     //
     db.query(strQry,
-        [bd.title, bd.catergory, bd.description, bd.imgURL, bd.price, bd.created_by, bd.quantity],
+        [bd.title, bd.catergory, bd.description, bd.imgURL, bd.quantity, bd.price, bd.created_by ],
         (err, results)=> {
             if(err) throw err;
             res.status(201).send(`number of affected row/s: ${results.affectedRows}`);
